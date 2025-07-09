@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Mestre do Jogo - 8 Palavras</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+    input, textarea, button { padding: 10px; margin: 5px; width: 80%; max-width: 400px; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <h1>Mestre do Jogo</h1>
+  <h2>Digite as 8 Palavras</h2>
+  <textarea id="wordsInput" rows="10" placeholder="Uma palavra por linha"></textarea><br>
+  <button onclick="startGame()">Salvar Palavras</button>
+
+  <div id="controlPanel" class="hidden">
+    <h3>Palavra Atual: <span id="currentWordNumber">1</span> / 8</h3>
+    <p><strong>Palavra:</strong> <span id="currentWord"></span></p>
+    <button onclick="nextWord()">Próxima Palavra</button>
+    <h3>Enviar Dica</h3>
+    <textarea id="hintInput" rows="2" placeholder="Digite a dica"></textarea><br>
+    <button onclick="copyHint()">Copiar Dica</button>
+    <p>Dicas usadas: <span id="hintsUsed">0</span> / 15</p>
+    <p id="copyStatus"></p>
+  </div>
+
+  <script>
+    let words = [];
+    let currentIndex = 0;
+    let hintsUsed = 0;
+
+    function startGame() {
+      const input = document.getElementById('wordsInput').value.trim();
+      words = input.split('\n').map(w => w.trim()).filter(w => w);
+      if (words.length !== 8) {
+        alert('Digite exatamente 8 palavras!');
+        return;
+      }
+      document.getElementById('controlPanel').classList.remove('hidden');
+      document.getElementById('currentWord').innerText = words[currentIndex];
+      document.getElementById('wordsInput').disabled = true;
+    }
+
+    function nextWord() {
+      if (currentIndex < words.length - 1) {
+        currentIndex++;
+        document.getElementById('currentWordNumber').innerText = currentIndex + 1;
+        document.getElementById('currentWord').innerText = words[currentIndex];
+      } else {
+        alert('Essas foram todas as palavras!');
+      }
+    }
+
+    function copyHint() {
+      const hint = document.getElementById('hintInput').value.trim();
+      if (!hint) {
+        alert('Digite uma dica!');
+        return;
+      }
+      navigator.clipboard.writeText(hint).then(() => {
+        document.getElementById('copyStatus').innerText = 'Dica copiada! Envie pelo WhatsApp.';
+        hintsUsed++;
+        document.getElementById('hintsUsed').innerText = hintsUsed;
+        if (hintsUsed >= 15) {
+          alert('Limite de 15 dicas atingido!');
+        }
+      });
+    }
+  </script>
+</body>
+</html>

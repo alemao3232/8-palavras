@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Jogador - 8 Palavras</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+    input, textarea, button { padding: 10px; margin: 5px; width: 80%; max-width: 400px; }
+  </style>
+</head>
+<body>
+  <h1>Jogador</h1>
+  <h3>Coloque aqui as dicas recebidas</h3>
+  <textarea id="hintsArea" rows="5" placeholder="Cole as dicas recebidas do Mestre aqui"></textarea><br>
+
+  <h3>Digite seu chute</h3>
+  <input id="guessInput" placeholder="Digite seu chute"><br>
+  <button onclick="checkGuess()">Chutar</button>
+  <p id="result"></p>
+
+  <script>
+    let currentWord = '';
+
+    // O Jogador define a palavra que está tentando adivinhar
+    currentWord = prompt('Peça ao Mestre: Qual é a palavra atual?').trim().toLowerCase();
+
+    function checkGuess() {
+      const guess = document.getElementById('guessInput').value.trim().toLowerCase();
+      if (guess === currentWord) {
+        document.getElementById('result').innerText = 'Acertou! Avise o Mestre para passar para a próxima palavra.';
+      } else {
+        document.getElementById('result').innerText = 'Errou! Tente de novo.';
+      }
+    }
+  </script>
+</body>
+</html>
