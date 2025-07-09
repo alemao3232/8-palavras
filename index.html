@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>8 Palavras - 15 Dicas</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+    input, button { padding: 10px; margin: 5px; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <h1>8 Palavras - 15 Dicas</h1>
+
+  <div id="setup">
+    <h2>Configurar Palavras</h2>
+    <textarea id="wordsInput" rows="10" cols="40" placeholder="Digite 8 palavras, uma por linha"></textarea><br />
+    <button onclick="startGame()">Iniciar Jogo</button>
+  </div>
+
+  <div id="game" class="hidden">
+    <h2>Palavra <span id="wordNumber">1</span> de 8</h2>
+    <p>Dicas restantes: <span id="hintsLeft">15</span></p>
+    <button onclick="useHint()">Usar Dica</button>
+    <p>Digite seu chute:</p>
+    <input id="guessInput" type="text" />
+    <button onclick="checkGuess()">Chutar</button>
+    <p id="message"></p>
+  </div>
+
+  <script>
+    let words = [];
+    let currentWord = 0;
+    let hintsLeft = 15;
+
+    function startGame() {
+      const input = document.getElementById('wordsInput').value.trim();
+      words = input.split('\n').map(w => w.trim().toLowerCase()).filter(w => w);
+
+      if (words.length !== 8) {
+        alert('Você deve inserir exatamente 8 palavras!');
+        return;
+      }
+
+      document.getElementById('setup').classList.add('hidden');
+      document.getElementById('game').classList.remove('hidden');
+      document.getElementById('hintsLeft').innerText = hintsLeft;
+      updateWordNumber();
+    }
+
+    function useHint() {
+      if (hintsLeft > 0) {
+        hintsLeft--;
+        document.getElementById('hintsLeft').innerText = hintsLeft;
+        if (hintsLeft === 0) {
+          endGame(false);
+        }
+      }
+    }
+
+    function checkGuess() {
+      const guess = document.getElementById('guessInput').value.trim().toLowerCase();
+      if (guess === words[currentWord]) {
+        currentWord++;
+        document.getElementById('guessInput').value = '';
+        if (currentWord === 8) {
+          endGame(true);
+        } else {
+          updateWordNumber();
+          document.getElementById('message').innerText = 'Acertou! Próxima palavra.';
+        }
+      } else {
+        document.getElementById('message').innerText = 'Errado! Tente de novo ou peça mais dicas.';
+      }
+    }
+
+    function updateWordNumber() {
+      document.getElementById('wordNumber').innerText = currentWord + 1;
+    }
+
+    function endGame(won) {
+      document.getElementById('game').innerHTML = won
+        ? '<h2>Parabéns! Vocês adivinharam todas as palavras! 🎉</h2>'
+        : '<h2>Acabaram as dicas! Fim de jogo! 😢</h2>';
+    }
+  </script>
+</body>
+</html>
